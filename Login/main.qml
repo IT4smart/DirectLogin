@@ -17,10 +17,12 @@ Window {
 
     Timer {
         id: message_timer
-        interval: 3000
+        interval: 2000
         running: true
         repeat: false
-        onTriggered: message_item.visible = false
+        onTriggered: {
+            message_item.visible = false
+        }
     }
 
     Image {
@@ -56,10 +58,9 @@ Window {
 
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 32
 
-            width: (parent.width * (1/3)) - 32
-            height: parent.height-64
+            width: (parent.width * (1/3))
+            height: parent.height
 
             Image {
                 id: logo
@@ -67,7 +68,12 @@ Window {
                 anchors.right: parent.right
                 anchors.top: parent.top
 
-                fillMode: Image.PreserveAspectFit
+                anchors.topMargin: 16
+                anchors.rightMargin: 16
+
+                width: parent.width-16
+
+                fillMode: Image.Stretch
                 source: "./logo.jpg"
             }
 
@@ -100,8 +106,7 @@ Window {
             radius: 16
 
             color: "white"
-            opacity: 0.86
-
+            opacity: 0.9
 
             Text {
                 id: message_text
