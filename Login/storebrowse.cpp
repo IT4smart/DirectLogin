@@ -47,18 +47,19 @@ bool Storebrowse::try_login(void) {
     loginProcess = new QProcess();
 
     loginProcess->start("sh");
+    // loginProcess->write("/opt/Citrix/ICAClient/util/storebrowse -E 'https://ddcxd1.ass-hn.de/citrix/xdstore/discovery'");
     loginProcess->write("/opt/Citrix/ICAClient/util/storebrowse -L 'ddcxd1.W7 Lehrer Test $S5-3' 'https://ddcxd1.ass-hn.de/citrix/xdstore/discovery'");
     loginProcess->closeWriteChannel();
 
     qDebug() << "Wait" << endl;
-    processFinished = loginProcess->waitForFinished(20000);
+    processFinished = loginProcess->waitForFinished(30000);
 
     if (!processFinished)
         loginProcess->kill();
     else
         qDebug() << shared_memory_struct->login_success << endl;
 
-    qDebug() << loginProcess->readAll() << endl;
+    qDebug() << loginProcess->readAllStandardOutput() << endl;
 
     loginProcess->close();
     loginProcess->deleteLater();
