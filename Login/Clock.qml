@@ -1,9 +1,6 @@
 import QtQuick 2.3
 
-
 Item {
-    id: clock
-
     width: 320
     height: 200
 
