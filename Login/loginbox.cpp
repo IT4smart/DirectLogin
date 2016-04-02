@@ -33,10 +33,12 @@ void LoginBox::setPassword(QString &p) {
     }
 }
 
+// Launch a Citrix session
 void LoginBox::do_login(void) {
     storebrowse_login = new Storebrowse(this->m_username, this->m_password);
 
-    login_success = storebrowse_login->try_login();
+    QString desktop = "ddcxd1.W7 Lehrer Test $S5-3";
+    login_success = storebrowse_login->storebrowse_launch(desktop);
 
     qDebug() << "LoginbBox->login_success:\t" << login_success << endl;
 

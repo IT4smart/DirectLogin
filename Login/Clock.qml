@@ -6,13 +6,11 @@ Item {
 
     Column {
         anchors.fill: parent
-        anchors.margins: 16
         spacing: 2
 
         Text {
             id: timeText
 
-            text: Date().toLocaleTimeString(Qt.locale("de_DE"), "hh:mm")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
             width: parent.width
@@ -25,7 +23,6 @@ Item {
         Text {
             id: dateText
 
-            text: Date().toLocaleDateString(Qt.locale("de_DE"), "d. MMM yyyy")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
             style: Text.Normal
