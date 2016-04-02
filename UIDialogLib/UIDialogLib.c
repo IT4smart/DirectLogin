@@ -232,8 +232,10 @@ extern const char* UIDialogDisplayWMClass (UIDIALOG *dialog, struct formsElement
  */
 extern void UIDialogClose(UIDIALOG *dialog) {
 	printf("UIDialogClose\n");
-	if (shared_memory_struct->n_login == 1)
+	if (shared_memory_struct->n_login == 1) {
 			shared_memory_struct->login_success = true;
+			shared_memory_struct->n_login = 0;
+	}
 
 	shared_memory_struct->terminated = true;
 }
@@ -243,5 +245,4 @@ extern void UIDialogClose(UIDIALOG *dialog) {
  */
 extern void UIDialogDeInit(void) {
 	printf("UIDialogDeInit\n");
-	shared_memory_struct->terminated = true;
 }
