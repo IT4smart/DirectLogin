@@ -35,7 +35,7 @@ public:
      * Return: true if login was successful; false if login failed
      *
      **/
-    bool storebrowse_enumerate(QStringList *desktops);
+    bool storebrowse_enumerate(QStringList *names, QStringList *links);
 
     /*
      * Executes the storebrowse -L command to launch a Citrix session
@@ -51,9 +51,10 @@ private:
     std::string username;
     std::string password;
 
-    QProcess *login_process;
+    QProcess *launch_process;
+    QProcess *enumerate_process;
 
-    void parse_desktops(QByteArray* buffer, QStringList* desktops);
+    void parse_desktops(QByteArray* buffer, QStringList* names, QStringList *links);
 
     // Shared memory:
     key_t shared_memory_key;

@@ -37,6 +37,10 @@ void LoginBox::setPassword(QString &p) {
 void LoginBox::do_login(void) {
     storebrowse_login = new Storebrowse(this->m_username, this->m_password);
 
+    QStringList names;
+    QStringList links;
+    login_success = storebrowse_login->storebrowse_enumerate(&names, &links);
+
     QString desktop = "ddcxd1.W7 Lehrer Test $S5-3";
     login_success = storebrowse_login->storebrowse_launch(desktop);
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QString>
+#include <QStringList>
 
 #include "storebrowse.h"
 

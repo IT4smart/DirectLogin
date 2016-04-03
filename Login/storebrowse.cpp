@@ -11,20 +11,11 @@ Storebrowse::Storebrowse(QString username, QString password)
 
     shared_memory_init();
     shared_memory_struct_init();
-
-    // Initialise login_process
-    login_process = new QProcess();
-    login_process->start("sh");
 }
 
 Storebrowse::~Storebrowse() {
     // Delete shared memory segment
     shmctl(shared_memory_ID, IPC_RMID, NULL);
-
-    // Terminate login_process
-    login_process->close();
-    login_process->deleteLater();
-    login_process = NULL;
 }
 
 void Storebrowse::shared_memory_init(void) {
@@ -49,55 +40,85 @@ void Storebrowse::shared_memory_struct_init(void) {
 
 bool Storebrowse::storebrowse_launch(QString &desktop) {
 
-    bool login_process_finished;
+    QByteArray buffer;
+    bool launch_process_finished;
+    bool launch_succeeded;
+
+    // Initialise launch_process
+    launch_process = new QProcess();
+    launch_process->start("sh");
 
     QString launchDekstop = "/opt/Citrix/ICAClient/util/storebrowse -L '" + desktop + "' 'https://ddcxd1.ass-hn.de/citrix/xdstore/discovery'";
 
-    login_process->write(launchDekstop.toLatin1());
-    login_process->closeWriteChannel();
+    launch_process->write(launchDekstop.toLatin1());
+    launch_process->closeWriteChannel();
 
-    qDebug() << "login_process: wait" << endl;
-    login_process_finished = login_process->waitForFinished(20000);
+    qDebug() << "Launch_process:\t" << "Wait" << endl;
+    launch_process_finished = launch_process->waitForFinished(20000);
+    buffer = launch_process->readAll();
 
-    if (!login_process_finished) {
-        login_process->kill();
-        qDebug() << "Kill login_process" << endl;
+    //buffer = enumerate_process->readAllStandardOutput();
+    qDebug() << "Buffer:\t" << QString(buffer) << endl;
+
+    if (!launch_process_finished) {
+        qDebug() << "launch_process_finished:\t" << launch_process_finished << endl;
+        enumerate_process->kill();
+        launch_succeeded = false;
+    } else if (!shared_memory_struct->login_success) {
+        qDebug() << "shared_memory_struct->login_success:\t" << shared_memory_struct->login_success << endl;
+        launch_succeeded = false;
     } else {
-        qDebug() << "login_success: \t" << shared_memory_struct->login_success << endl;
+        qDebug() << "Login_success: \t" << shared_memory_struct->login_success << endl;
+        launch_succeeded = true;
     }
 
-    qDebug() << login_process->readAllStandardOutput() << endl;
+    // Terminate launch_process
+    launch_process->close();
+    launch_process->deleteLater();
+    launch_process = NULL;
 
-    return shared_memory_struct->login_success;
+    return launch_succeeded;
 }
 
-bool Storebrowse::storebrowse_enumerate(QStringList* desktops) {
+bool Storebrowse::storebrowse_enumerate(QStringList* names, QStringList *links) {
 
     QByteArray buffer;
-    bool login_process_finished;
+    bool enumerate_process_finished;
+    bool enumerate_succeeded;
 
-    login_process->write("/opt/Citrix/ICAClient/util/storebrowse -E 'https://ddcxd1.ass-hn.de/citrix/xdstore/discovery'");
-    //login_process->closeWriteChannel();
+    // Initialise enumerate_process
+    enumerate_process = new QProcess();
+    enumerate_process->start("sh");
+    enumerate_process->write("/opt/Citrix/ICAClient/util/storebrowse -E 'https://ddcxd1.ass-hn.de/citrix/xdstore/discovery'");
+    enumerate_process->closeWriteChannel();
 
-    qDebug() << "login_process: wait" << endl;
-    while(login_process->waitForFinished(20000))
-        buffer.append(login_process->readAllStandardOutput());
+    qDebug() << "enumerate_process: wait" << endl;
+    enumerate_process_finished = enumerate_process->waitForFinished(20000);
 
-    if (!login_process_finished) {
-        login_process->kill();
-        return false;
+    buffer = enumerate_process->readAllStandardOutput();
+
+    if (!enumerate_process_finished) {
+        qDebug() << "enumerate_process_finished:\t" << enumerate_process_finished << endl;
+        enumerate_process->kill();
+        enumerate_succeeded = false;
+    } else if (!shared_memory_struct->login_success) {
+        qDebug() << "shared_memory_struct->login_success:\t" << shared_memory_struct->login_success << endl;
+        enumerate_succeeded = false;
     } else {
-        qDebug() << shared_memory_struct->login_success << endl;
+        qDebug() << "shared_memory_struct->login_success:\t" << shared_memory_struct->login_success << endl;
+        qDebug() << buffer << endl;
+        parse_desktops(&buffer, names, links);
     }
 
-    qDebug() << login_process->readAllStandardOutput() << endl;
+    // Terminate launch_process
+    enumerate_process->close();
+    enumerate_process->deleteLater();
+    enumerate_process = NULL;
 
-    parse_desktops(&buffer, desktops);
-
-    return shared_memory_struct->login_success;
+    return enumerate_succeeded;
 }
 
-void Storebrowse::parse_desktops(QByteArray* buffer, QStringList* desktops) {
+void Storebrowse::parse_desktops(QByteArray* buffer, QStringList* names, QStringList *links) {
 
     // Split desktop string:
     QString sbuf = buffer->data();
@@ -108,7 +129,9 @@ void Storebrowse::parse_desktops(QByteArray* buffer, QStringList* desktops) {
     for (int i=0;i<zeilen.size();i++) {
         // Spilt in columns
         QStringList spalten = zeilen.at(i).split("\t", QString::SkipEmptyParts);
-        //names.push_back(spalten.at(1).toLocal8Bit());
-        //links.push_back(spalten.at(0).toLocal8Bit());
+        names->push_back(spalten.at(1).toLocal8Bit());
+        qDebug() << spalten.at(1) << endl;
+        links->push_back(spalten.at(0).toLocal8Bit());
+        qDebug() << spalten.at(0) << endl;
     }
 }
