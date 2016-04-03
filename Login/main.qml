@@ -82,6 +82,9 @@ Window {
 
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+
+                anchors.bottomMargin: 16
+                anchors.rightMargin: 16
             }
         }
     }
@@ -106,7 +109,10 @@ Window {
             radius: 16
 
             color: "white"
-            opacity: 0.9
+            opacity: 0.85
+
+            border.color: "red"
+            border.width: 3
 
             Text {
                 id: message_text
@@ -116,7 +122,7 @@ Window {
 
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                text:"Login failed"
+                text:"Login"
                 color: "red"
                 font.pixelSize: 48
                 font.family: "Futura"

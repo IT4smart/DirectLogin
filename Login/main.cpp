@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     LoginBox access;
 
     engine.rootContext()->setContextProperty("access", &access);
-    QQmlComponent component(&engine, QUrl::fromLocalFile("main.qml"));
+    QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/main.qml")));
     component.create();
 
     return app.exec();

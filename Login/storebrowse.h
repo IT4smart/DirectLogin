@@ -2,6 +2,7 @@
 #define STOREBROWSE_H
 
 #include <QString>
+#include <QStringList>
 #include <QDebug>
 #include <QProcess>
 
@@ -26,13 +27,34 @@ public:
     Storebrowse(QString username, QString password);
     ~Storebrowse();
 
-    bool try_login(void);
+    /*
+     * Executes the storebrowse -E command to get the available desktops
+     *
+     * Input: QStringList* to save the desktops
+     *
+     * Return: true if login was successful; false if login failed
+     *
+     **/
+    bool storebrowse_enumerate(QStringList *names, QStringList *links);
+
+    /*
+     * Executes the storebrowse -L command to launch a Citrix session
+     *
+     * Input: QString &desktop to specify the desktop to be launched
+     *
+     * Return: true if session launch was successful; false if session launch failed
+     *
+     **/
+    bool storebrowse_launch(QString &desktop);
 
 private:
     std::string username;
     std::string password;
 
-    QProcess *loginProcess;
+    QProcess *launch_process;
+    QProcess *enumerate_process;
+
+    void parse_desktops(QByteArray* buffer, QStringList* names, QStringList *links);
 
     // Shared memory:
     key_t shared_memory_key;
