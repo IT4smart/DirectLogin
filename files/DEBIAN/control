@@ -5,3 +5,6 @@ Essential: No
 Priority: required
 Maintainer: Raphael Lekies <raphael.lekies@it4s.eu>
 Description: Custom library for citrix to display our own interface for log in.
+Package: armv7-libuidialog
+Architecture: amd64
+Installed-Size: 38
