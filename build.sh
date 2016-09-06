@@ -31,6 +31,7 @@ cd ..
 sed '/Package/d' -i "${SRC_DIR}/files/DEBIAN/control"
 sed '/Depends/d' -i "${SRC_DIR}/files/DEBIAN/control"
 echo "Package: libuidialog" >> "${SRC_DIR}/files/DEBIAN/control"
+echo "Depends: icaclient (>= 13.3.0.34451)" >> "${SRC_DIR}/files/DEBIAN/control"
 mkdir -p files/opt/Citrix/ICAClient/lib
 cp -ar UIDialogLib/UIDialogLib.so files/opt/Citrix/ICAClient/lib
 #cp -ar Ressources files/opt/IT4S/startpage
