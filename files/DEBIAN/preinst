@@ -1,1 +1,8 @@
 #!/bin/bash
+set -e
+
+PKG_OK=$(dpkg-query -W -f='${Status}' icaclient | grep "install ok installed")
+
+if [ "install ok installed" == "${PKG_OK}" ] ; then
+	mv /opt/Citrix/ICAClient/lib/UIDialogLib.so /opt/Citrix/ICAClient/UIDialogLib.so.bak
+fi
