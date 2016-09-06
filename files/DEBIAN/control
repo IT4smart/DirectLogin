@@ -4,7 +4,4 @@ Section: it4s-main
 Essential: No
 Priority: required
 Maintainer: Raphael Lekies <raphael.lekies@it4s.eu>
-Description: Custom library for citrix to display our own interface for log in.
-Package: libuidialog
-Depends: icaclient (>= 13.3.0.34451)
-Installed-Size: 38
+Description: Custom library for citrix to display our own interface for log in
