@@ -51,10 +51,10 @@ if [ $(dpkg --print-architecture) == i386 ] ; then
     dpkg-deb -e icaclient_13.3.0.344519_i386.deb icaclient_tmp
     
     # backup the old library
-    mv opt/Citrix/ICAClient/lib/UIDialogLib.so opt/Citrix/ICAClient/lib/UIDialogLib.so.bak
+    mv icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so.bak
     
     # copy newly compiled library
-    cp UIDialogLib/UIDialogLib.so opt/Citrix/ICAClient/lib/UIDialogLib.so
+    cp UIDialogLib/UIDialogLib.so icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so
     dpkg-deb -b icaclient_tmp icaclient_13.3.0.344519_i386.deb
     
 fi
