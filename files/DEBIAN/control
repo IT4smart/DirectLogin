@@ -1,7 +1,8 @@
 Origin: IT4S
 Version: 1.0.0
-Section: it4s-main
+Section: utils
 Essential: No
-Priority: required
-Maintainer: Raphael Lekies <raphael.lekies@it4s.eu>
+Priority: extra
+Homepage: http://www.it4s.eu
+Maintainer: IT4S GmbH <support@it4s.eu>
 Description: Custom library for citrix to display our own interface for log in

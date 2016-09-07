@@ -30,13 +30,31 @@ cd UIDialogLib
 make "-j${NUM_CPUS}"
 # get back to root
 cd ..
-sed '/Package/d' -i "${SRC_DIR}/files/DEBIAN/control"
-sed '/Depends/d' -i "${SRC_DIR}/files/DEBIAN/control"
-echo "Package: libuidialog" >> "${SRC_DIR}/files/DEBIAN/control"
-echo "Depends: icaclient" >> "${SRC_DIR}/files/DEBIAN/control"
-mkdir -p files/opt/Citrix/ICAClient/lib
-cp -ar UIDialogLib/UIDialogLib.so files/opt/Citrix/ICAClient/lib
+#sed '/Package/d' -i "${SRC_DIR}/files/DEBIAN/control"
+#sed '/Depends/d' -i "${SRC_DIR}/files/DEBIAN/control"
+#echo "Package: libuidialog" >> "${SRC_DIR}/files/DEBIAN/control"
+#echo "Depends: icaclient" >> "${SRC_DIR}/files/DEBIAN/control"
+#mkdir -p files/opt/Citrix/ICAClient/lib
+#cp -ar UIDialogLib/UIDialogLib.so files/opt/Citrix/ICAClient/lib
 #cp -ar Ressources files/opt/IT4S/startpage
-fix_arch_ctl "files/DEBIAN/control"
-dpkg_build files "${1}-libuidialog.deb"
+#fix_arch_ctl "files/DEBIAN/control"
+#dpkg_build files "${1}-libuidialog.deb"
 
+# create directory to unpack the debian package 
+mkdir icaclient_tmp
+
+# check on which architecture we are running
+if [ $(dpkg --print-architecture) == i386 ] ; then
+    # download the package for this architecture
+    wget http://it4s.backup.stockdashboard.de/debian/icaclient_13.3.0.344519_i386.deb
+    dpkg-deb -x icaclient_13.3.0.344519_i386.deb icaclient_tmp
+    dpkg-deb -e icaclient_13.3.0.344519_i386.deb icaclient_tmp
+    
+    # backup the old library
+    mv opt/Citrix/ICAClient/lib/UIDialogLib.so opt/Citrix/ICAClient/lib/UIDialogLib.so.bak
+    
+    # copy newly compiled library
+    cp UIDialogLib/UIDialogLib.so opt/Citrix/ICAClient/lib/UIDialogLib.so
+    dpkg-deb -b icaclient_tmp icaclient_13.3.0.344519_i386.deb
+    
+fi
