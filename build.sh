@@ -30,7 +30,7 @@ if [ $(dpkg --print-architecture) == i386 ] ; then
 
     dpkg-deb -b icaclient_tmp icaclient_13.3.0.344519_i386.deb
     
-elif [ $(dpkg --print-architecture) == armv7 ] ; then
+elif [ $(dpkg --print-architecture) == armhf ] ; then
     # download the package for this architecture
     wget http://it4s.backup.stockdashboard.de/src/icaclient_13.3.0.344519_armhf.deb
     dpkg-deb -x icaclient_13.3.0.344519_armhf.deb icaclient_tmp
