@@ -43,6 +43,19 @@ elif [ $(dpkg --print-architecture) == armhf ] ; then
     cp UIDialogLib/UIDialogLib.so icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so
 
     dpkg-deb -b icaclient_tmp icaclient_13.3.0.344519_armhf.deb
+elif [ $(dpkg --print-architecture) == amd64 ] ; then
+    # download the package for this architecture
+    wget http://it4s.backup.stockdashboard.de/src/icaclient_13.3.0.344519_amd64.deb
+    dpkg-deb -x icaclient_13.3.0.344519_amd64.deb icaclient_tmp
+    dpkg-deb -e icaclient_13.3.0.344519_amd64.deb icaclient_tmp/DEBIAN
+    
+    # backup the old library
+    mv icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so.bak
+    
+    # copy newly compiled library
+    cp UIDialogLib/UIDialogLib.so icaclient_tmp/opt/Citrix/ICAClient/lib/UIDialogLib.so
+
+    dpkg-deb -b icaclient_tmp icaclient_13.3.0.344519_amd64.deb
 else
     echo -e "The architecture $(dpkg --print-architecture) is not supported"
     
