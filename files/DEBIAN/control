@@ -1,8 +1,8 @@
-Origin: IT4S
+Origin: IT4smart
 Version: 1.0.0
 Section: utils
 Essential: No
 Priority: extra
-Homepage: http://www.it4s.eu
-Maintainer: IT4S GmbH <support@it4s.eu>
+Homepage: http://www.it4smart.eu
+Maintainer: IT4smart GmbH <support@it4smart.eu>
 Description: Custom library for citrix to display our own interface for log in
