@@ -13,7 +13,7 @@ make "-j${NUM_CPUS}"
 cd ..
 
 # Find version of debian
-export DEBIAN_VERSION=$(awk -F= '$1=="VERSION_ID" { print $2 ;}' /etc/os-release) | tr -d \"
+export DEBIAN_VERSION=$(awk -F= '$1=="VERSION_ID" { print $2 ;}' /etc/os-release | tr -d \")
 
 # check on which architecture we are running
 if [ $(dpkg --print-architecture) == i386 ] ; then
